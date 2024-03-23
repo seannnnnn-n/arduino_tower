@@ -42,6 +42,8 @@ void showChar(int w,int h,char text);
 
 void cleanLine(int h);
 
+void reset();
+
 int FFN(char _pos[]); 
 
 bool button(int number);
@@ -145,13 +147,7 @@ void loop(){
 
     /*---reset---*/
     if(digitalRead(12)){
-      selecting = true;
-      showString(0,0,"  reseting....  ");
-      cleanLine(1);
-      setup();
-      showString(7,1,"  ");
-      showString(11,1,"  ");
-      showString(4*_select+3,1,_arrow);
+      reset();
     }
 
     /*---finish---*/
@@ -257,6 +253,16 @@ void showChar(int w,int h,char text){
 
 void cleanLine(int h){
   showString(0,h,"                ");
+}
+
+void reset(){
+  selecting = true;
+  showString(0,0,"  reseting....  ");
+  cleanLine(1);
+  setup();
+  showString(7,1,"  ");
+  showString(11,1,"  ");
+  showString(4*_select+3,1,_arrow);
 }
 
 int FFN(char _pos[]){
