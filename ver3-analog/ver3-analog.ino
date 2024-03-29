@@ -4,9 +4,6 @@ LiquidCrystal_I2C lcd_I2C_27(0x27,16,2);
 
 /*notes
 char 0 = 48
-button4 = right
-button7 = act
-button8 = left
 */
 
 /*---index declare---*/
