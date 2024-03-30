@@ -7,9 +7,6 @@ char 0 = 48
 */
 
 /*---index declare---*/
-bool lighting0 = false;
-bool lighting1 = false;
-bool lighting2 = false;
 bool lightAction0 = false;
 bool lightAction1 = false;
 bool lightAction2 = false;
@@ -29,9 +26,12 @@ int _click = 0;
 int _lastPos = 4;
 int times = 0;
 int hard = 0;
-int max0 = 0;
-int max1 = 0;
-int max2 = 0;
+int last0 = 0;
+int last1 = 0;
+int last2 = 0;
+int delta0 = 0;
+int delta1 = 0;
+int delta2 = 0;
 
 String _arrow = "<-";
 String _action = "down"; 
@@ -71,9 +71,12 @@ void setup(){
     _lastPos = 4;
     _handing = ' ';
     times = 0;
-    max0 = 0;
-    max1 = 0;
-    max2 = 0;
+    last0 = 0;
+    last1 = 0;
+    last2 = 0;
+    delta0 = 0;
+    delta1 = 0;
+    delta2 = 0;
   }
 }
 
@@ -84,30 +87,24 @@ void difficulty(){
   showInt(10,1,dif[2]);
   showString(0,0,"   difficulty   ");
 
-  if(lighting(0) == false && lighting0 == true) lightAction0 = true;
+    lightAction0 = lighting(0);
+    lightAction1 = lighting(1);
+    lightAction2 = lighting(2);
 
-  if(lighting(1) == false && lighting1 == true) lightAction1 = true;
-
-  if(lighting(2) == false && lighting2 == true) lightAction2 = true;
-
-  lighting0 = lighting(0);
-  lighting1 = lighting(1);
-  lighting2 = lighting(2);
-
-  if(lightAction2){
-    lightAction2 = false;
-    if(_select != 2){
-      showString(4*_select+3,1,"  ");
-      _select++;
-      showString(4*_select+3,1,_arrow);
-    }
-  }
-
-  else if(lightAction0){
+  if(lightAction0){
     lightAction0 = false;
     if(_select != 0){
       showString(4*_select+3,1,"    ");
       _select--;
+      showString(4*_select+3,1,_arrow);
+    }
+  }
+
+  else if(lightAction2){
+    lightAction2 = false;
+    if(_select != 2){
+      showString(4*_select+3,1,"  ");
+      _select++;
       showString(4*_select+3,1,_arrow);
     }
   }
@@ -133,11 +130,13 @@ void difficulty(){
 }
 
 void loop(){
-  if(analogRead(A0) > max0) max0 = analogRead(A0);
-  
-  if(analogRead(A1) > max1) max1 = analogRead(A1);
+  delta0 = last0 - analogRead(A0);
+  delta1 = last1 - analogRead(A1);
+  delta2 = last2 - analogRead(A2);
 
-  if(analogRead(A2) > max2) max2 = analogRead(A2);
+  last0 = analogRead(A0);
+  last1 = analogRead(A1);
+  last2 = analogRead(A2);
 
   if(selecting){
     difficulty();
@@ -189,15 +188,9 @@ void loop(){
       showString(12,0,_action);
     }
 
-    if(lighting(0) == false && lighting0 == true) lightAction0 = true;
-
-    if(lighting(1) == false && lighting1 == true) lightAction1 = true;
-
-    if(lighting(2) == false && lighting2 == true) lightAction2 = true;
-
-    lighting0 = lighting(0);
-    lighting1 = lighting(1);
-    lighting2 = lighting(2);
+    lightAction0 = lighting(0);
+    lightAction1 = lighting(1);
+    lightAction2 = lighting(2);
 
     /*---action control---*/
     if(lightAction0){
@@ -249,7 +242,7 @@ void loop(){
 
     times++;
 
-    delay(10);
+    delay(30);
   }
 }
 
@@ -286,15 +279,17 @@ int FFN(char _pos[]){
 
 bool lighting(int number){
   if(number == 0){
-    if(analogRead(A0) < max0 - 150) return true;
+    if(delta0 > 130) return true;
     else return false;
   }
+
   else if(number == 1){
-    if(analogRead(A1) < max1 - 150) return true;
+    if(delta1 > 130) return true;
     else return false;
   }
+
   else if(number == 2){
-    if(analogRead(A2) < max2 - 150) return true;
+    if(delta2 > 130) return true;
     else return false;
   }
 }
