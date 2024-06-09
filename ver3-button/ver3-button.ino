@@ -68,12 +68,13 @@ void setup(){
     _total[0][i] = _pos1[i];
     _total[1][i] = _pos2[i];
     _total[2][i] = _pos3[i];
-
-    _action = "down";
-    _click = 0;
-    _lastPos = 4;
-    _handing = ' ';
   }
+
+  _action = "down";
+  _click = 0;
+  _lastPos = 4;
+  _handing = ' ';
+  
 }
 
 void difficulty(){
@@ -93,8 +94,8 @@ void difficulty(){
   buttonPress7 = button(7);
   buttonPress8 = button(8);
 
-  if(buttonAction4){
-    buttonAction4 = false;
+  if(buttonAction8){
+    buttonAction8 = false;
     if(_select != 0){
       showString(4*_select+3,1,"  ");
       _select--;
@@ -102,8 +103,8 @@ void difficulty(){
     }
   }
 
-  else if(buttonAction8){
-    buttonAction8 = false;
+  else if(buttonAction4){
+    buttonAction4 = false;
     if(_select != 2){
       showString(4*_select+3,1,"    ");
       _select++;
@@ -116,8 +117,12 @@ void difficulty(){
     selecting = false;
     hard = dif[_select];
 
-    for(int i = hard - 1;i >= 0;i--){
-      _pos1[i] = char(i + 49);
+    for(int i = 0;i < 6;i++){
+      _pos1[i] = ' ';
+    }
+
+    for(int i = 5,j = hard;i >= 6 - hard;i--,j--){
+      _pos1[i] = char(j + 48);
     }
 
     showString(0,0,"   choosed  ");
@@ -151,13 +156,14 @@ void loop(){
     }
 
     /*---finish---*/
-    if(_total[1][(6 - hard)] == '1' || _total[2][6 - hard] == '1'){
+    if(_total[2][6 - hard] == '1'){
       _action = "win ";
       showString(0,0,"you win!! hard ");
       showInt(15,0,hard);
       showString(0,1,"    click:");
       showInt(10,1,_click);
       showString(12,1,"    ");
+      tone(5,500,1000);
       return 0;
     }
 
@@ -183,8 +189,8 @@ void loop(){
     buttonPress8 = button(8);
 
     /*---action control---*/
-    if(buttonAction4){
-      buttonAction4 = false;
+    if(buttonAction8){
+      buttonAction8 = false;
       if(_select != 0){
         showString(4*_select+3,1,"  ");
         _select--;
@@ -192,8 +198,8 @@ void loop(){
       }
     }
 
-    else if(buttonAction8){
-      buttonAction8 = false;
+    else if(buttonAction4){
+      buttonAction4 = false;
       if(_select != 2){
         showString(4*_select+3,1,"    ");
         _select++;
@@ -257,7 +263,7 @@ void cleanLine(int h){
 
 void reset(){
   selecting = true;
-  showString(0,0,"  reseting....  ");
+  showString(0,0,"  resetting...  ");
   cleanLine(1);
   setup();
   showString(7,1,"  ");
